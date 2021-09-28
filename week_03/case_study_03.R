@@ -3,7 +3,7 @@
  library(dplyr)
  
 # Plot 1
-gapminder_new <- gapminder %>% 
+gapminder_new <- gapminder %>% S
    filter(country != "Kuwait") 
  
 ggplot(gapminder_new, aes(lifeExp, gdpPercap, size = pop/100000, color = continent)) +
