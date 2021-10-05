@@ -1,11 +1,3 @@
----
-title: "Case Study 05"
-author: Zhenqi Zhou
-date: October 5, 2021
-output: github_document
----
-
-```{r Beware the Canadians!, warning=TRUE}
 library(spData)
 library(sf)
 library(tidyverse)
@@ -43,4 +35,4 @@ ggplot() +
 area_border <- st_area(border)
 area_border_km <- set_units(area_border, km^2)
 
-```
+
