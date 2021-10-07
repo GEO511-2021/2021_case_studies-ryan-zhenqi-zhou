@@ -24,7 +24,8 @@ us_states_new <- st_transform(us_states, albers)
 New_York <- us_states_new %>%
   filter(NAME == "New York")
 
-border <- st_intersection(Canada_bu, New_York)
+# border <- st_intersection(Canada_bu, New_York)
+border <- st_intersection(st_geometry(Canada_bu), st_geometry(New_York))
 
 ggplot() +
   geom_sf(data = New_York) +
