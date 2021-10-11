@@ -77,8 +77,8 @@ the pedestrian environment: route distance, pedestrian route directness
 the route, green visual ratio, and image elements of street view photo
 (Table 1).
 
-![](C:/Users/ryanz/Desktop/d878779ff01040f796f4c0a4797703b4-0001.jpg)
-![](C:/Users/ryanz/Desktop/d878779ff01040f796f4c0a4797703b4-0002.jpg)
+![](https://raw.githubusercontent.com/GEO511-2021/2021_case_studies-ryan-zhenqi-zhou/master/Final%20Project/Indices1.jpg)
+![](https://raw.githubusercontent.com/GEO511-2021/2021_case_studies-ryan-zhenqi-zhou/master/Final%20Project/Indices2.jpg)
 
 R packages used: tidyverse, dplyr, ggplot2, sf, sp.
 

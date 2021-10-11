@@ -48,8 +48,8 @@ Note that All data type is shapefile.
 
 The park’s pedestrian shed was delineated by walking routes presumably reached within 15 min. By virtue of these walking routes, I developed 10 indices which related to the walking routes to the park. The former covers three indices of the service capacity: service POIs, service area, and service population, while the latter covers seven indices of the pedestrian environment: route distance, pedestrian route directness (PRD), the number of turns, the number of crossings, POI density along the route, green visual ratio, and image elements of street view photo (Table 1).
 
-![](C:/Users/ryanz/Desktop/d878779ff01040f796f4c0a4797703b4-0001.jpg)
-![](C:/Users/ryanz/Desktop/d878779ff01040f796f4c0a4797703b4-0002.jpg)
+![](https://raw.githubusercontent.com/GEO511-2021/2021_case_studies-ryan-zhenqi-zhou/master/Final%20Project/Indices1.jpg)
+![](https://raw.githubusercontent.com/GEO511-2021/2021_case_studies-ryan-zhenqi-zhou/master/Final%20Project/Indices2.jpg)
 
 R packages used: tidyverse, dplyr, ggplot2, sf, sp.
 
