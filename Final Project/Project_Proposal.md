@@ -24,7 +24,7 @@ environment reasonably along these routes.
 A reasonable walking distance is necessary for daily park users. There
 are many measurement to define pedestrian shed, such as Euclidean
 distance buffer method. This image proposed a line-based network buffer
-method that defined areas near the centerline of routes as accessible,
+method that defined areas near the center line of routes as accessible,
 which is more accurate, as it is closer to the actual environment
 available to pedestrians.
 
@@ -32,8 +32,8 @@ available to pedestrians.
 
 ![](https://callisto.ggsrv.com/imgsrv/FastFetch/UBER1/ZI-5TQT-2020-JUL01-IDSI-3086-1)
 
-This two image proposed several factors related the pedestrian shed and
-walking route environment, which I can use.
+This two images proposed several factors related to the pedestrian shed
+and walking route environment, which I can use.
 
 ## Example 3
 
@@ -46,8 +46,8 @@ details. You can see the distribution of the data very clearly.
 # Proposed data sources
 
 I collected data from my own previous research projects. I uploaded my
-data to Github, here is the link:
-<https://github.com/GEO511-2021/2021_case_studies-ryan-zhenqi-zhou/tree/master/GEO511%20Final%20Project%20Data%20Set>
+data to Github. Here is the link:
+<https://github.com/GEO511-2021/2021_case_studies-ryan-zhenqi-zhou/tree/master/Final%20Project/Final%20Project%20Data%20Set>
 
 1.  Residential building points of interest (Point)
 2.  Park entrances (Point)
@@ -63,12 +63,12 @@ data to Github, here is the link:
     threshold. This data also includes the information of route
     distance, duration, starting, and ending points.
 
-Note that All data type is shpfile.
+Note that All data type is shapefile.
 
 # Proposed methods
 
 The park’s pedestrian shed was delineated by walking routes presumably
-reached within 15 min. By virtue of these walking routes, I develop 10
+reached within 15 min. By virtue of these walking routes, I developed 10
 indices which related to the walking routes to the park. The former
 covers three indices of the service capacity: service POIs, service
 area, and service population, while the latter covers seven indices of
@@ -86,7 +86,7 @@ R packages used: tidyverse, dplyr, ggplot2, sf, sp.
 
 The goal of this project is to provide a quantitative description of the
 walking route to a park using novel distance from home to the park and
-pedestrian environment measures. In results, I will create maps using
+pedestrian environment measures. In result, I will create maps using
 tmap with each specific index, to find out which routes are walkable.
 Moreover, I will create some box plots and scatter plots to see the
 distribution of each index.
