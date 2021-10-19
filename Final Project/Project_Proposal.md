@@ -1,8 +1,8 @@
 Project Proposal
 ================
-Zhenqi Zhou
+Zhenqi Zhou Last compiled date: 19 October, 2021
 
-# Introduction to problem/question
+# Detecting the pedestrian shed and walking route environment of urban parks with open-source data
 
 # Problem / Question
 
