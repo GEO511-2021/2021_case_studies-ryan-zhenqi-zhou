@@ -30,7 +30,8 @@ available to pedestrians.
 
 ## Example 2
 
-![](https://callisto.ggsrv.com/imgsrv/FastFetch/UBER1/ZI-5TQT-2020-JUL01-IDSI-3086-1)
+![](https://raw.githubusercontent.com/GEO511-2021/2021_case_studies-ryan-zhenqi-zhou/master/Final%20Project/Figure 2.jpg)
+![](https://raw.githubusercontent.com/GEO511-2021/2021_case_studies-ryan-zhenqi-zhou/master/Final%20Project/Figure 3.jpg)
 
 This two images proposed several factors related to the pedestrian shed
 and walking route environment, which I can use.
