@@ -1,0 +1,54 @@
+---
+title: "Case Study 08"
+author: Zhenqi Zhou
+date: October 26, 2021
+output:
+  html_document: default
+  github_document: default
+  powerpoint_presentation: default
+  word_document: default
+---
+
+## Annual Mean Carbon Dioxide Concentrations 1959-Present
+
+```{r, results = 'hide', message = FALSE, echo = F}
+library(tidyverse)
+library(kableExtra)
+library(knitr)
+
+url = "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_annmean_mlo.txt"
+data <- read_table(url, skip = 57, col_names = c("year","mean","unc"))
+
+ggplot(data, aes(year, mean)) +
+  geom_line(color = "red") +
+  labs(y="Mona Loa Annual Mean N2O (ppm)")
+```
+
+## Top Five Annual Mean Carbon Dioxide Concentrations at Mona Loa
+
+```{r, message = FALSE, echo = F}
+top10 <- data %>%
+  arrange(desc(mean)) %>%
+  top_n(mean, n = 10)
+
+top10 %>%
+  kable(align = "cc") %>%
+  kable_styling() %>% 
+  row_spec(1, bold = T, color = "Red") %>% 
+  as_image(width = 50, file = "top10.png")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
