@@ -1,7 +1,45 @@
 ---
 title: "Case Study 08"
-author: Your Name
-date: August 1, 2020
-output: github_document
+author: Zhenqi Zhou
+date: October 26, 2021
+output:
+  html_document: default
+  github_document: default
+  powerpoint_presentation: default
+  word_document: default
 ---
+```{r, results = 'hide', message = FALSE, echo = F}
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+
+data <- read_table("ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_annmean_mlo.txt",skip = 57, col_names = c("year","mean","unc"))
+
+ggplot(data, aes(year, mean)) +
+  geom_line(color = "red")
+```
+```{r, results = 'hide', message = FALSE, echo = F}
+top10 <- data %>%
+  arrange(desc(mean)) %>%
+  top_n(mean, n = 10)
+
+top10 %>%
+  kable() %>%
+  as_image(width = 10, file = "table.png")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
