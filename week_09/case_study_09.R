@@ -1,24 +1,12 @@
----
-title: "Case Study 09"
-author: Zhenqi Zhou
-date: November 2, 2021
-output: github_document
----
-
-## import R pacages
-```{r}
 library(sf)
 library(tidyverse)
 library(ggmap)
 library(rnoaa)
 library(spData)
-```
-
-## Download zipped data from noaa with storm track information
-```{r}
 data(world)
 data(us_states)
 
+# Download zipped data from noaa with storm track information
 dataurl="https://www.ncei.noaa.gov/data/international-best-track-archive-for-climate-stewardship-ibtracs/v04r00/access/shapefile/IBTrACS.NA.list.v04r00.points.zip"
 tdir=tempdir()
 download.file(dataurl,destfile=file.path(tdir,"temp.zip"))
@@ -26,10 +14,7 @@ unzip(file.path(tdir,"temp.zip"),exdir = tdir)
 list.files(tdir)
 
 storm_data <- read_sf(list.files(tdir,pattern=".shp",full.names = T))
-```
 
-## plot
-```{r}
 storms <- storm_data %>%
   filter(SEASON >= 1950) %>%
   mutate_if(is.numeric, function(x) ifelse(x==-999.0,NA,x)) %>%
@@ -43,9 +28,7 @@ ggplot() +
   stat_bin2d(data=storms, aes(y=st_coordinates(storms)[,2], x=st_coordinates(storms)[,1]),bins=100) +
   scale_fill_distiller(palette="YlOrRd", trans="log", direction=-1, breaks = c(1,10,100,1000)) +
   coord_sf(ylim=region[c(2,4)], xlim=region[c(1,3)])
-```
-## plot
-```{r}
+  
 states <- st_transform(us_states, st_crs(storms)) %>% 
   rename("state" = "NAME") 
 
@@ -56,8 +39,19 @@ Top_5 <- storm_states %>%
   summarize(storms=length(unique(NAME))) %>%
   arrange(desc(storms)) %>%
   slice(1:5)
-```
 
 
 
+
+
+
+
+
+
+
+
+
+
+  
+  
 
