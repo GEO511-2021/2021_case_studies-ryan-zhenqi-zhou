@@ -135,11 +135,19 @@ lulc=as.factor(lulc)
 # update the RAT with a left join
 levels(lulc)=left_join(levels(lulc)[[1]],lcd)
 
-
-#' 
+# plot it
+gplot(lulc)+
+  geom_raster(aes(fill=as.factor(value)))+
+  scale_fill_manual(values=levels(lulc)[[1]]$col,
+                    labels=levels(lulc)[[1]]$landcover,
+                    name="Landcover Type")+
+  coord_equal()+
+  theme(legend.position = "bottom")+
+  guides(fill=guide_legend(ncol=1,byrow=TRUE))
 
 #' 
 #' # Land Surface Temperature
+plot(lst[[1:12]])
 
 #' 
 #' ## Convert LST to Degrees C 
@@ -154,6 +162,8 @@ plot(lst[[1:10]])
 #' <div class="well">
 #' 
 #' # MODLAND Quality control
+lstqc=stack("data/MOD11A2.006_aid0001.nc",varname="QC_Day")
+plot(lstqc[[1:2]])
 #' 
 #' See a detailed explaination [here](https://lpdaac.usgs.gov/sites/default/files/public/modis/docs/MODIS_LP_QA_Tutorial-1b.pdf).  Some code below from [Steven Mosher's blog](https://stevemosher.wordpress.com/2012/12/05/modis-qc-bits/).
 #' 
@@ -168,12 +178,14 @@ plot(lst[[1:10]])
 
 #' 
 #' ### LST QC data
-#' 
+
 #' QC data are encoded in 8-bit 'words' to compress information.
 #' 
-
+values(lstqc[[1:2]])%>%table()
+intToBits(65)
+intToBits(65)[1:8]
 #' 
-
+as.integer(intToBits(65)[1:8])
 #' #### MODIS QC data are _Big Endian_
 #' 
 #' Format          Digits              value     sum
@@ -184,7 +196,7 @@ plot(lst[[1:10]])
 #' 
 #' Reverse the digits with `rev()` and compare with QC table above.
 #' 
-
+rev(as.integer(intToBits(65)[1:8]))
 #' QC for value `65`:
 #' 
 #' * LST produced, other quality, recommend examination of more detailed QA
@@ -194,14 +206,56 @@ plot(lst[[1:10]])
 #' 
 #' ### Filter the the lst data using the QC data
 #' 
+## set up data frame to hold all combinations
+QC_Data <- data.frame(Integer_Value = 0:255,
+                      Bit7 = NA, Bit6 = NA, Bit5 = NA, Bit4 = NA,
+                      Bit3 = NA, Bit2 = NA, Bit1 = NA, Bit0 = NA,
+                      QA_word1 = NA, QA_word2 = NA, QA_word3 = NA,
+                      QA_word4 = NA)
 
+## 
+for(i in QC_Data$Integer_Value){
+  AsInt <- as.integer(intToBits(i)[1:8])
+  QC_Data[i+1,2:9]<- AsInt[8:1]
+}
+
+QC_Data$QA_word1[QC_Data$Bit1 == 0 & QC_Data$Bit0==0] <- "LST GOOD"
+QC_Data$QA_word1[QC_Data$Bit1 == 0 & QC_Data$Bit0==1] <- "LST Produced,Other Quality"
+QC_Data$QA_word1[QC_Data$Bit1 == 1 & QC_Data$Bit0==0] <- "No Pixel,clouds"
+QC_Data$QA_word1[QC_Data$Bit1 == 1 & QC_Data$Bit0==1] <- "No Pixel, Other QA"
+
+QC_Data$QA_word2[QC_Data$Bit3 == 0 & QC_Data$Bit2==0] <- "Good Data"
+QC_Data$QA_word2[QC_Data$Bit3 == 0 & QC_Data$Bit2==1] <- "Other Quality"
+QC_Data$QA_word2[QC_Data$Bit3 == 1 & QC_Data$Bit2==0] <- "TBD"
+QC_Data$QA_word2[QC_Data$Bit3 == 1 & QC_Data$Bit2==1] <- "TBD"
+
+QC_Data$QA_word3[QC_Data$Bit5 == 0 & QC_Data$Bit4==0] <- "Emiss Error <= .01"
+QC_Data$QA_word3[QC_Data$Bit5 == 0 & QC_Data$Bit4==1] <- "Emiss Err >.01 <=.02"
+QC_Data$QA_word3[QC_Data$Bit5 == 1 & QC_Data$Bit4==0] <- "Emiss Err >.02 <=.04"
+QC_Data$QA_word3[QC_Data$Bit5 == 1 & QC_Data$Bit4==1] <- "Emiss Err > .04"
+
+QC_Data$QA_word4[QC_Data$Bit7 == 0 & QC_Data$Bit6==0] <- "LST Err <= 1"
+QC_Data$QA_word4[QC_Data$Bit7 == 0 & QC_Data$Bit6==1] <- "LST Err > 2 LST Err <= 3"
+QC_Data$QA_word4[QC_Data$Bit7 == 1 & QC_Data$Bit6==0] <- "LST Err > 1 LST Err <= 2"
+QC_Data$QA_word4[QC_Data$Bit7 == 1 & QC_Data$Bit6==1] <- "LST Err > 4"
+kable(head(QC_Data))
 #' 
 #' ### Select which QC Levels to keep
-
+keep=QC_Data[QC_Data$Bit1 == 0,]
+keepvals=unique(keep$Integer_Value)
+keepvals
 #' 
 #' ### How many observations will be dropped?
 #' 
+qcvals=table(values(lstqc))  # this takes a minute or two
 
+
+QC_Data%>%
+  dplyr::select(everything(),-contains("Bit"))%>%
+  mutate(Var1=as.character(Integer_Value),
+         keep=Integer_Value%in%keepvals)%>%
+  inner_join(data.frame(qcvals))%>%
+  kable()
 #' 
 #' Do you want to update the values you are keeping?
 #' 
@@ -210,14 +264,19 @@ plot(lst[[1:10]])
 #' These steps take a couple minutes.  
 #' 
 #' Make logical flag to use for mask
-
+lstkeep=calc(lstqc,function(x) x%in%keepvals)
 #' 
 #' Plot the mask
-
+gplot(lstkeep[[4:8]])+
+  geom_raster(aes(fill=as.factor(value)))+
+  facet_grid(variable~.)+
+  scale_fill_manual(values=c("blue","red"),name="Keep")+
+  coord_equal()+
+  theme(legend.position = "bottom")
 #' 
 #' 
 #' Mask the lst data using the QC data and overwrite the original data.
-
+lst=mask(lst,mask=lstkeep,maskval=0)
 #' 
 #' </div>
 #' </div>
@@ -228,7 +287,7 @@ plot(lst[[1:10]])
 #' 
 #' The default layer names of the LST file include the date as follows:
 #' 
-
+names(lst)[1:5]
 #' 
 #' Convert those values to a proper R Date format by dropping the "X" and using `as.Date()`.
 ## -----------------------------------------------------------------------------
@@ -242,9 +301,19 @@ lst=setZ(lst,tdates)
 #' 
 #' 
 #' ## Part 1: Extract timeseries for a point
-#' 
+lw=SpatialPoints(data.frame(x= -78.791547,y=43.007211))
+projection(lw) <- "+proj=longlat"
+lw = spTransform(x = lw, CRS("+proj=longlat"))
+
 #' Extract LST values for a single point and plot them.
-#' 
+lst_f <- extract(lst,lw,buffer=1000,fun=mean,na.rm=T) %>%
+  t()
+
+lst_z <- getZ(lst)
+df_lst <- data.frame(x = lst_z, y = lst_f)
+ggplot(df_lst, aes(x, y)) +
+  geom_point() +
+  geom_smooth(span  = n)
 #' <div class="well">
 #' <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo2">Show Hints</button>
 #' <div id="demo2" class="collapse">
