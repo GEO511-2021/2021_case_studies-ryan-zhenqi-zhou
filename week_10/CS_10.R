@@ -48,15 +48,15 @@ library(ncdf4) # to import data from netcdf format
 #' ## Land Use Land Cover
 #' 
 ## ---- eval=F, warning=F-------------------------------------------------------
-## # Create afolder to hold the downloaded data
-## dir.create("data",showWarnings = F) #create a folder to hold the data
-## 
-## lulc_url="https://github.com/adammwilson/DataScienceData/blob/master/inst/extdata/appeears/MCD12Q1.051_aid0001.nc?raw=true"
-## lst_url="https://github.com/adammwilson/DataScienceData/blob/master/inst/extdata/appeears/MOD11A2.006_aid0001.nc?raw=true"
-## 
-## # download them
-## download.file(lulc_url,destfile="data/MCD12Q1.051_aid0001.nc", mode="wb")
-## download.file(lst_url,destfile="data/MOD11A2.006_aid0001.nc", mode="wb")
+# Create afolder to hold the downloaded data
+dir.create("data",showWarnings = F) #create a folder to hold the data
+
+lulc_url="https://github.com/adammwilson/DataScienceData/blob/master/inst/extdata/appeears/MCD12Q1.051_aid0001.nc?raw=true"
+lst_url="https://github.com/adammwilson/DataScienceData/blob/master/inst/extdata/appeears/MOD11A2.006_aid0001.nc?raw=true"
+
+# download them
+download.file(lulc_url,destfile="data/MCD12Q1.051_aid0001.nc", mode="wb")
+download.file(lst_url,destfile="data/MOD11A2.006_aid0001.nc", mode="wb")
 
 #' 
 #' 
