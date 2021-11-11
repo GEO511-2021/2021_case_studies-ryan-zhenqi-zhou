@@ -310,10 +310,10 @@ lst_f <- extract(lst,lw,buffer=1000,fun=mean,na.rm=T) %>%
   t()
 
 lst_z <- getZ(lst)
-df_lst <- data.frame(x = lst_z, y = lst_f)
-ggplot(df_lst, aes(x, y)) +
+df_lst <- data.frame(date = lst_z, temperature = lst_f)
+ggplot(df_lst, aes(date, temperature)) +
   geom_point() +
-  geom_smooth(span  = n)
+  geom_smooth(n = 200, span  = 0.01, color = "blue")
 #' <div class="well">
 #' <button data-toggle="collapse" class="btn btn-primary btn-sm round" data-target="#demo2">Show Hints</button>
 #' <div id="demo2" class="collapse">
@@ -354,10 +354,20 @@ ggplot(df_lst, aes(x, y)) +
 #' </div>
 #' 
 #' A plot of the monthly climatologies will look like this:
-
+tmonth = as.numeric(format(getZ(lst),"%m"))
+lst_month = stackApply(lst, tmonth, fun = mean)
+names(lst_month)=month.name
+gplot(lst_month) + 
+  geom_tile(aes(fill = value)) +
+  facet_wrap(~variable) +
+  scale_fill_gradient(low = 'blue', high = 'orange') +
+  coord_sf(datum = NA)
 #' 
 #' And the table should be as follows:
-
+cellStats(lst_month, mean) %>%
+  as.data.frame() %>%
+  rename(Mean = ".") %>%
+  kable()
 #' 
 #' 
 #' ## Part 3: Summarize Land Surface Temperature by Land Cover
